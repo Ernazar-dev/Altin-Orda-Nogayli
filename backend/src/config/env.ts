@@ -14,6 +14,9 @@ const schema = z
     /** Ruxsat etilgan frontend manzillari, vergul bilan: https://site.onrender.com,https://boshqa.uz */
     CORS_ORIGIN: z.string().default('http://localhost:5173'),
     MAX_UPLOAD_MB: z.coerce.number().min(1).max(10).default(5),
+    /** Google AI Studio kaliti. Bo'sh bo'lsa AI yordamchi o'chiq (503 qaytaradi), qolgan sayt ishlayveradi. */
+    GEMINI_API_KEY: z.string().trim().optional(),
+    GEMINI_MODEL: z.string().trim().default('gemini-3.6-flash'),
   })
   .superRefine((v, ctx) => {
     if (v.NODE_ENV !== 'production') return;

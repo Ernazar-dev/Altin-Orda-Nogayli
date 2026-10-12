@@ -1,6 +1,7 @@
 import { env } from './config/env';
 import { prisma } from './config/prisma';
 import { createApp } from './app';
+import { warmPublicCache } from './middlewares/cache';
 
 import { syncTeacher } from './modules/auth/teacher';
 import type { Server } from 'node:http';
@@ -8,7 +9,10 @@ import type { Server } from 'node:http';
 const app = createApp();
 let server: Server | undefined;
 void syncTeacher().then(() => {
-  server = app.listen(env.PORT, () => console.log('Backend ishga tushdi, port:', env.PORT));
+  server = app.listen(env.PORT, () => {
+    console.log('Backend ishga tushdi, port:', env.PORT);
+    void warmPublicCache(env.PORT);
+  });
 }).catch(async (error: unknown) => {
   console.error('Teacher setup failed:', error instanceof Error ? error.message : 'Unknown error');
   await prisma.$disconnect();

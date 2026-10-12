@@ -1,3 +1,4 @@
+import compression from 'compression';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
@@ -6,8 +7,10 @@ import { prisma } from './config/prisma';
 import { asyncHandler, param } from './lib/http';
 import { errorHandler, notFoundHandler } from './middlewares/error';
 import { apiLimiter, assetLimiter } from './middlewares/rateLimit';
+import { publicCache } from './middlewares/cache';
 import { MIME_BY_EXT, type ImageExt } from './middlewares/upload';
 import { activitiesRoutes } from './modules/activities/activities.routes';
+import { assistantRoutes } from './modules/assistant/assistant.routes';
 import { analyticsRoutes } from './modules/analytics/analytics.routes';
 import { authRoutes } from './modules/auth/auth.routes';
 import { comparisonsRoutes } from './modules/comparisons/comparisons.routes';
@@ -39,6 +42,9 @@ export const createApp = (): Express => {
       maxAge: 600,
     }),
   );
+  // JSON javoblar (manbalar ~50KB) gzip bilan 4-5 baravar kichrayadi: sekin tarmoqda sezilarli tezlik.
+  // Oqimli (SSE) AI javobi siqilmaydi: aks holda bo'laklar bufferda to'planib, oqim ma'nosini yo'qotadi.
+  app.use(compression({ filter: (req, res) => !req.path.endsWith('/chat/stream') && compression.filter(req, res) }));
   app.use(express.json({ limit: '1mb' }));
 
   app.get('/api/health', (_req, res) => {
@@ -68,6 +74,7 @@ export const createApp = (): Express => {
 
   const api = express.Router();
   api.use(apiLimiter);
+  api.use(publicCache);
   api.use('/auth', authRoutes);
   api.use('/periods', periodsRoutes);
   api.use('/thinkers', thinkersRoutes);
@@ -84,6 +91,7 @@ export const createApp = (): Express => {
   api.use('/students', studentsRoutes);
   api.use('/settings', settingsRoutes);
   api.use('/analytics', analyticsRoutes);
+  api.use('/assistant', assistantRoutes);
   app.use('/api', api);
 
   app.use(notFoundHandler);

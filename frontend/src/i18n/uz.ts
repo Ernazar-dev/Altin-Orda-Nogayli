@@ -444,6 +444,21 @@ export const uz = {
   'footer.explore': "Bo'limlar",
   'footer.account': 'Hisob',
   'footer.rights': 'Barcha ilmiy mazmun dissertatsiyadan olingan.',
+  'assistant.open': 'AI yordamchi',
+  'assistant.title': 'AI yordamchi',
+  'assistant.subtitle': "Platforma bo'yicha savollarga javob beradi",
+  'assistant.welcome': "Assalomu alaykum! Men platformadagi davrlar, mutafakkirlar, manbalar, qadriyatlar va testlar haqidagi savollaringizga javob beraman.",
+  'assistant.placeholder': 'Savolingizni yozing…',
+  'assistant.enlarge': 'Kattalashtirish',
+  'assistant.shrink': 'Kichraytirish',
+  'assistant.send': 'Yuborish',
+  'assistant.clear': 'Suhbatni tozalash',
+  'assistant.error': "Javob olib bo'lmadi. Birozdan keyin qayta urinib ko'ring.",
+  'assistant.note': "AI xato qilishi mumkin. Muhim ma'lumotni manbalardan tekshiring.",
+  'assistant.s1': "Oltin O'rda davrida qanday tarbiyaviy g'oyalar bo'lgan?",
+  'assistant.s2': "No'g'ay davri mutafakkirlari kimlar?",
+  'assistant.s3': 'Platformada qanday testlar bor?',
+  'assistant.s4': "Ikki davr o'rtasida qanday farq bor?",
 } as const;
 
 export type I18nKey = keyof typeof uz;

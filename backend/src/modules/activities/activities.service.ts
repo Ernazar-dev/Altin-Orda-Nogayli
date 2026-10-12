@@ -20,8 +20,12 @@ export const activitiesService: CrudService & {
   attempt(activityId: string, optionId: string, userId: string): Promise<unknown>;
 } = {
   async list(query, userId, role) {
-    const rows = await activitiesRepository.list(query);
-    const attempted = new Set((await activitiesRepository.latestAttempts(userId)).map((a) => a.activityId));
+    // Ikki so'rov bir vaqtda (har biri uzoq bazaga alohida aylanish); mehmon uchun urinishlar so'rovi umuman kerak emas.
+    const [rows, attempts] = await Promise.all([
+      activitiesRepository.list(query),
+      userId ? activitiesRepository.latestAttempts(userId) : Promise.resolve([]),
+    ]);
+    const attempted = new Set(attempts.map((a) => a.activityId));
     return rows.map((a) => present(a, role, attempted));
   },
   async get(id, userId, role) {

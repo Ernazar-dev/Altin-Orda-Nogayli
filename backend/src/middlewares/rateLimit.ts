@@ -49,3 +49,12 @@ export const loginLimiter = rateLimit({
     return `${ipKeyGenerator(req.ip ?? '')}|${user}`;
   },
 });
+
+/** AI yordamchi (pullik tashqi API): IP bo'yicha daqiqasiga cheklangan. */
+export const assistantLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: prod ? 12 : 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message,
+});
