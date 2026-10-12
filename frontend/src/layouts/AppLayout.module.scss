@@ -1,0 +1,37 @@
+/* Ustoz paneli: to'q yashil yon panel + oltin urg'u, xira krem fon (oq kartalar ajralib turadi) */
+.layout { min-height: 100vh; background: #e9ece0 !important; }
+.sider { position: sticky !important; top: 0; height: 100vh; background: linear-gradient(180deg, #1a4338 0%, #12302a 100%) !important; border-right: 0; overflow: auto; box-shadow: 1px 0 0 #0c231d;
+  &::-webkit-scrollbar { width: 6px; } &::-webkit-scrollbar-thumb { background: #ffffff26; border-radius: 3px; } }
+.siderInner { display: flex; flex-direction: column; min-height: 100%; }
+.siderHead { padding: 22px 20px 18px; border-bottom: 1px solid #ffffff1c; }
+.siderOrn { margin-top: auto; padding: 16px 0; opacity: .45; }
+.brand { display: flex; align-items: center; gap: 12px; min-height: 40px; text-decoration: none; color: #fcf8ea; font: 600 18px/1.2 var(--f-serif); letter-spacing: -.3px; &:hover { color: #f1dfaa; } }
+
+/* Ochiladigan menyu: guruh sarlavhasi oltin, ichidagi bandlar quyuqroq panelda */
+.menu { border-inline-end: 0 !important; padding: 14px 12px 8px; background: transparent !important;
+  :global(.ant-menu-item), :global(.ant-menu-submenu-title) { min-height: 44px; display: flex; align-items: center; border-radius: 8px; font-size: 14px; color: #cdd9c8 !important; margin-inline: 0 !important; width: 100% !important;
+    :global(.anticon) { color: #9fb8a6; font-size: 16px; } }
+  :global(.ant-menu-item):hover, :global(.ant-menu-submenu-title):hover { background: #ffffff14 !important; color: #fff !important; :global(.anticon) { color: #f1dfaa; } }
+  :global(.ant-menu-submenu-title) { font-weight: 600; letter-spacing: .01em; color: #f1dfaa !important; :global(.anticon) { color: #e2c788; } }
+  :global(.ant-menu-submenu-title) { height: auto !important; line-height: 1.3 !important; padding-block: 9px !important; :global(.ant-menu-title-content) { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; } }
+  :global(.ant-menu-submenu-arrow) { color: #e2c788 !important; }
+  :global(.ant-menu-sub.ant-menu-inline) { background: #0f2a23 !important; border-radius: 10px; margin: 2px 0 8px; padding: 4px; box-shadow: inset 0 1px 0 #ffffff0d; }
+  :global(.ant-menu-sub .ant-menu-item) { min-height: 40px; font-size: 13.5px; }
+  :global(.ant-menu-item-selected) { background: #e2c788 !important; color: #173d32 !important; font-weight: 600; :global(.anticon) { color: #173d32 !important; } }
+  :global(.ant-menu-submenu-selected > .ant-menu-submenu-title) { color: #fff !important; }
+}
+.content { background: transparent !important; min-width: 0; }
+.header { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 12px; padding: 0 var(--gutter) !important; height: var(--header-h) !important; line-height: normal !important; background: #fffefb !important; border-bottom: 1px solid var(--c-line); box-shadow: 0 2px 0 #e2c78866; }
+.headerTitle { color: var(--c-ink); font: 600 19px var(--f-serif); letter-spacing: -.2px; }
+.burger { display: none; width: 44px; height: 44px; }
+.mobileBrand { display: none; }
+.headerRight { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.user { min-height: 44px; }
+.userName { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: bottom; }
+.main { padding: 36px var(--gutter) 64px; max-width: 1320px; width: 100%; margin: 0 auto; }
+
+/* Mobil menyu (Drawer) ham shu ranglarda */
+.drawer { :global(.ant-drawer-close) { color: #cdd9c8; } :global(.ant-drawer-title) { color: #fcf8ea; } }
+
+@media (max-width: 991px) { .sider { display: none; } .burger { display: inline-flex; } .mobileBrand { display: block; margin-right: auto; span { display: none; } .brand { color: var(--c-ink); } } .userName, .siteLabel, .headerTitle { display: none; } .main { padding-top: 24px; } }
+@media print { .sider, .header { display: none; } .main { padding: 0; } }

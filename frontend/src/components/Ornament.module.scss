@@ -1,0 +1,31 @@
+.band {
+  width: 100%;
+  background-repeat: repeat-x;
+  background-position: center;
+  pointer-events: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin: var(--s-4) 0 var(--s-5);
+  max-width: 320px;
+  span {
+    flex: 1;
+    height: 1px;
+    opacity: 0.45;
+  }
+  i {
+    flex: none;
+    opacity: 0.8;
+  }
+}
+
+.texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}

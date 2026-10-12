@@ -1,0 +1,43 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.log
+.DS_Store
+docs/qa/
+docs/dissertation-extracted.txt
+
+# Local source documents (not needed for deployment)
+/disertaciya/
+
+# Local editor, agent and OS files
+.idea/
+.vscode/
+.codex/
+.agents/
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# Test/build caches
+coverage/
+.nyc_output/
+.cache/
+.vite/
+*.tsbuildinfo
+
+# Local credentials and database backups
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.backup
+*.sqlite
+*.sqlite3

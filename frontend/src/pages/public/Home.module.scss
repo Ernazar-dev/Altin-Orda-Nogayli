@@ -1,0 +1,66 @@
+/* ── Hero: gilam (kiyiz) naqshi ruhida; sarlavhadan tashqari butun balandlik 100vh ichida ── */
+.hero { min-height: calc(100vh - var(--header-h)); min-height: calc(100dvh - var(--header-h)); display: flex; flex-direction: column; position: relative; isolation: isolate; overflow: hidden; background: #173d32; color: #fff9e9;
+  &::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .09; mix-blend-mode: soft-light; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .9 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); } }
+.frame { position: absolute; inset: 14px; border: 1px solid #e2c78838; pointer-events: none; z-index: 0; }
+.heroInner { flex: 1; width: 100%; max-width: 1240px; margin: auto; padding: 40px 56px 12px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 36px; align-items: center; position: relative; z-index: 1; }
+.kicker { display: flex; flex-wrap: wrap; row-gap: 6px; align-items: center; gap: 10px; margin: 0 0 clamp(14px, 3vh, 28px); color: #d8c795; font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; > span { width: 5px; height: 5px; background: #d8c795; border-radius: 50%; flex-shrink: 0; } i { width: 20px; height: 1px; background: #9eac8866; } }
+.heroText h1 { margin: 0; display: flex; flex-direction: column; align-items: flex-start; color: #fcf8ea; font-weight: 500; letter-spacing: 0; text-wrap: initial; }
+.titleStart { font: italic 400 clamp(18px, 1.7vw, 24px)/1.3 var(--f-serif); color: #cdd9c8; margin-bottom: clamp(6px, 1.4vh, 14px); }
+.heroText h1 em { font: 500 clamp(44px, min(6.4vw, 11vh), 100px)/1 var(--f-serif); letter-spacing: -.035em; font-style: normal; color: #f1dfaa; text-wrap: balance; }
+.titleEnd { max-width: 30ch; margin-top: clamp(14px, 2.6vh, 26px); padding-top: clamp(12px, 2vh, 20px); position: relative; font: 400 clamp(17px, 1.6vw, 22px)/1.4 var(--f-serif); color: #e9efe3; &::before { content: ''; position: absolute; top: 0; left: 0; width: 56px; height: 1px; background: #e2c788; } }
+.cta { display: flex; align-items: center; flex-wrap: wrap; gap: 25px; margin-top: clamp(22px, 4.4vh, 40px); a { display: inline-flex; align-items: center; justify-content: center; gap: 15px; min-height: 48px; font-size: 13px; font-weight: 500; text-decoration: none; } }
+.primary { background: #e6ce96; color: #213b2d; padding: 14px 24px; border-radius: 3px; &:hover { background: #f6e0b0; color: #213b2d; } }
+.secondary { color: #ece8d9; padding: 12px 0; border-bottom: 1px solid #82987b; &:hover { color: #e6ce96; } }
+
+.art { --stage-h: min(430px, calc(100dvh - var(--header-h) - 290px)); position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; min-width: 0; }
+
+.edge { position: relative; z-index: 1; width: calc(100% - 56px); margin-inline: auto; }
+.heroBase { position: relative; z-index: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 12px 56px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 11px; color: #bfcbb9; > a { color: #e4d2a7; text-decoration: none; display: inline-flex; gap: 14px; align-items: center; min-height: 40px; } > span { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; :global(.anticon) { font-size: 15px; color: #bcbe8d; } } i { width: 3px; height: 3px; background: #c5b27e; border-radius: 50%; } }
+
+/* ── Hero'dan keyingi bo'limlar ── */
+.pillars { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 1240px; margin: 0 auto; padding: 34px 40px; border-bottom: 1px solid var(--c-line); > a { display: flex; align-items: center; gap: 15px; padding: 0 25px; text-decoration: none; &:first-child { padding-left: 0; } &:last-child { padding-right: 0; } &:not(:last-child) { border-right: 1px solid var(--c-line); } > :last-child { margin-left: auto; font-size: 12px; } } strong { display: block; font-size: 13px; font-weight: 600; } p { margin: 5px 0 0; font-size: 11px; color: var(--c-muted); line-height: 1.6; } }
+.pillarIcon { font-size: 23px; color: #8c7953; }
+.section { max-width: 1240px; margin: auto; padding: 64px 40px; scroll-margin-top: 96px; }
+.sectionHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 25px; margin-bottom: 29px; h2 { font: 500 36px/1.2 var(--f-serif); letter-spacing: -.9px; margin-bottom: 12px; } p:not(:global(.eyebrow)) { color: var(--c-muted); font-size: 14px; margin-bottom: 0; max-width: 60ch; line-height: 1.8; } :global(.eyebrow) { text-transform: uppercase; letter-spacing: 1.8px; font-size: 10px; margin-bottom: 12px; } > a { font-size: 12px; white-space: nowrap; text-decoration: none; padding-bottom: 3px; border-bottom: 1px solid #b5c0ad; display: flex; align-items: center; gap: 15px; } }
+.periods { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; > a { border-radius: 7px; > div:last-child { padding: 28px; } h3 { font-size: 29px; } p { max-width: 52ch; } } }
+.thinkersSection { background: #eef1e8; border-block: 1px solid #e1e6d9; }
+.thinkers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; > a { padding: 25px; } }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 28px; li { border-top: 1px solid #bac5ad; padding-top: 24px; } li > span { color: #a38d5f; font: 38px var(--f-serif); } h3 { font-size: 21px; font-weight: 500; line-height: 1.4; margin: 20px 0; max-width: 18ch; min-height: 58px; } a { display: inline-flex; align-items: center; gap: 18px; font-size: 12px; text-decoration: none; } }
+.practice { max-width: 1160px; margin: 0 auto 72px; background: #1c4034; padding: 42px 48px; border-radius: 9px; display: flex; justify-content: space-between; align-items: center; gap: 35px; h2 { color: #f5f1de; font: 500 36px var(--f-serif); } p:not(.practiceKicker) { margin: 0; font-size: 14px; color: #c2cfba; } }
+.practiceKicker { margin: 0 0 16px; color: #d8c795; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+.steps a, .sectionHead > a { min-height: 40px; }
+
+/* ── Moslashuvchanlik ── */
+@media (max-height: 700px) and (min-width: 901px) { .heroInner { padding-top: 24px; } .cta { margin-top: 20px; } }
+@media (max-width: 1200px) { .heroInner { padding-inline: 40px; gap: 28px; } .edge { width: calc(100% - 56px); } .heroBase { padding-inline: 40px; } .practice { margin-inline: 40px; } }
+@media (max-width: 900px) {
+  .heroInner { grid-template-columns: 1fr; gap: 14px; padding: 24px 28px 8px; align-content: center; }
+  .art { --stage-h: min(420px, max(150px, calc(100dvh - var(--header-h) - 470px))); }
+  .heroText h1 em { font-size: clamp(42px, 11vw, 76px); }
+  .heroBase { padding-inline: 28px; }
+  .pillars { padding: 28px; > a { gap: 10px; padding: 0 15px; > :last-child { display: none; } } }
+  .section { padding: 48px 28px; }
+  .practice { margin: 0 28px 48px; padding: 35px; flex-wrap: wrap; }
+}
+@media (max-width: 650px) {
+  .frame { inset: 8px; }
+  .heroInner { padding: 28px 22px 8px; }
+  .art { --stage-h: max(140px, calc(100dvh - var(--header-h) - 462px)); }
+  .kicker { display: none; }
+  .heroText h1 em { font-size: clamp(36px, 11vw, 50px); }
+  .titleEnd { margin-top: 12px; padding-top: 12px; max-width: 26ch; }
+  .cta { margin-top: 18px; }
+  .edge { width: calc(100% - 32px); }
+  .heroBase { padding: 8px 22px 22px; > span { display: none; } }
+  .cta { gap: 16px; a { font-size: 12px; } }
+  .pillars { grid-template-columns: 1fr; padding: 10px 24px; > a { padding: 20px 0 !important; border-right: none !important; &:not(:last-child) { border-bottom: 1px solid var(--c-line); } > :last-child { display: block; } } }
+  .section { padding: 44px 24px; }
+  .sectionHead { align-items: flex-start; flex-direction: column; gap: 16px; h2 { font-size: 30px; } }
+  .periods, .thinkers { grid-template-columns: 1fr; }
+  .periods > a > div:last-child { padding: 24px; }
+  .steps { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 26px 20px; h3 { font-size: 19px; min-height: 54px; } }
+  .practice { margin: 0 24px 44px; padding: 28px; h2 { font-size: 30px; } }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .primary, .secondary { transition: background .2s, color .2s; }
+}

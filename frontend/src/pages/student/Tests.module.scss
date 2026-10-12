@@ -1,0 +1,32 @@
+/* Testlar: kartalar setkasi; tugma har doim kartaning pastida, matn yonida */
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.card {
+  display: flex; flex-direction: column; gap: 12px; position: relative;
+  background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: 28px 28px 26px;
+  box-shadow: var(--shadow-1); transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color .3s;
+  &:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); border-color: var(--c-gold); }
+  h2 { font: 600 22px/1.25 var(--f-serif); margin: 0; color: var(--c-ink); }
+  p { margin: 0; }
+  a { display: block; margin-top: auto; }
+}
+.no { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--c-ink); color: var(--c-gold); font: italic 600 20px var(--f-serif); }
+.desc { color: var(--c-muted); font-size: 14px; line-height: 1.7; }
+.meta { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.last { display: block; font-size: var(--fs-sm); }
+
+.hub { display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.diag {
+  background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: var(--s-6);
+  display: grid; gap: var(--s-3); align-content: start;
+  h2 { margin: 0; }
+  p { margin: 0; }
+}
+.big { font-family: var(--f-serif); font-size: var(--fs-xl); font-weight: 700; color: var(--c-ink); line-height: 1; }
+.growth {
+  margin-top: var(--s-6); padding: var(--s-6); border-radius: var(--r-lg);
+  background: var(--c-ink); color: #fff;
+  display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); text-align: center;
+  h2 { color: #fff; grid-column: 1 / -1; text-align: left; margin: 0; }
+  span { display: block; color: #cfd6e6; font-size: var(--fs-sm); }
+  strong { font-family: var(--f-serif); font-size: var(--fs-xl); color: var(--c-gold); }
+}

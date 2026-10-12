@@ -1,0 +1,61 @@
+.block {
+  margin-top: var(--s-7);
+  h2 { margin-bottom: var(--s-4); }
+  &:first-of-type { margin-top: var(--s-5); }
+}
+
+.layout {
+  display: grid;
+  gap: var(--s-6);
+  align-items: start;
+}
+.index {
+  display: none;
+  position: sticky;
+  top: calc(var(--header-h) + var(--s-4));
+  ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--c-line); }
+  a {
+    display: block;
+    padding: var(--s-2) var(--s-4);
+    text-decoration: none;
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    min-height: 36px;
+    &:hover { color: var(--c-ink); border-left-color: var(--c-gold); }
+  }
+}
+.sections { display: grid; gap: var(--s-7); min-width: 0; }
+.section {
+  scroll-margin-top: calc(var(--header-h) + var(--s-4));
+  h2 { display: flex; align-items: baseline; gap: var(--s-3); }
+  h2 span { font-family: var(--f-sans); font-size: var(--fs-xs); color: var(--c-gold-deep); font-weight: 700; }
+}
+@media (min-width: 1000px) {
+  .layout { grid-template-columns: 200px minmax(0, 1fr); }
+  .index { display: block; }
+}
+
+.hero {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--s-4);
+  h1 { margin-bottom: var(--s-1); }
+  p { margin: 0; }
+}
+
+.valueList {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3);
+  li { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-md); padding: var(--s-4); }
+  a.title { font-family: var(--f-serif); font-weight: 700; font-size: var(--fs-md); }
+  p { margin: var(--s-2) 0 0; font-size: var(--fs-sm); color: var(--c-muted); }
+}
+
+.filters { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-bottom: var(--s-5); :global(.ant-select) { min-width: 200px; } }
+
+.section, .block { > :global(.prose) { max-width: none; padding: 30px 34px; border: 1px solid var(--c-line); background: white; border-radius: 9px; columns: 2 380px; column-gap: 56px; } }
+.filters { padding: 16px; border: 1px solid var(--c-line); background: white; border-radius: 9px; :global(.ant-select) { flex: 1 1 180px; min-width: 0; } }
+@media (max-width: 600px) { .section, .block { > :global(.prose) { padding: 20px; } } }

@@ -1,0 +1,437 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Ish vaqtida: Neon "pooled" ulanish (pgbouncer). Migratsiyalar uchun: to'g'ridan-to'g'ri ulanish (DIRECT_URL).
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// Yuklangan rasmlar bazada saqlanadi: Render bepul tarifida disk vaqtinchalik (qayta ishga tushganda o'chadi).
+model Upload {
+  id        String   @id @default(uuid())
+  mime      String
+  data      Bytes
+  createdAt DateTime @default(now())
+}
+
+// LText = Json: { "uz": string, "kaa": string }
+
+enum Role {
+  TEACHER
+  STUDENT
+}
+
+enum Criterion {
+  AXIOLOGICAL
+  COGNITIVE
+  ACTIVITY
+  REFLECTIVE
+}
+
+enum Level {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum SourceType {
+  DOSTON
+  TOLGOV
+  RIVOYAT
+  TARIXIY_ASAR
+  OGZAKI_IJOD
+  ADABIY_ASAR
+  BOSHQA
+}
+
+enum ActivityType {
+  SOURCE_ANALYSIS
+  THOUGHT_ANALYSIS
+  MODERN_LINK
+}
+
+enum DiagnosticKind {
+  INITIAL
+  FINAL
+}
+
+enum TimelineKind {
+  DAVR
+  VOQEA
+  MUTAFAKKIR
+  ASAR
+  GOYA
+}
+
+enum ReviewStatus {
+  DRAFT
+  REVIEWED
+}
+
+enum ValueCategory {
+  AXIOLOGICAL
+  INTELLECTUAL
+  PATRIOTIC
+  FAMILY
+  LABOR
+  COMMUNICATIVE
+  AESTHETIC
+  REFLECTIVE
+  SOCIAL
+}
+
+enum ProgressEntity {
+  PERIOD
+  THINKER
+  VALUE
+  SOURCE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  fullName     String
+  username     String   @unique
+  passwordHash String
+  role         Role     @default(STUDENT)
+  classLevel   Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  testResults       TestResult[]
+  diagnosticResults DiagnosticResult[]
+  activityAttempts  ActivityAttempt[]
+  progress          StudentProgress[]
+  createdTests      Test[]            @relation("TestCreator")
+  createdActivities Activity[]        @relation("ActivityCreator")
+}
+
+model Period {
+  id               String       @id @default(cuid())
+  name             Json
+  startYear        Int?
+  endYear          Int?
+  shortDescription Json
+  content          Json
+  image            String?
+  order            Int          @default(0)
+  reviewStatus     ReviewStatus @default(DRAFT)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  thinkers   Thinker[]
+  sources    Source[]
+  activities Activity[]
+  tests      Test[]
+  timeline   TimelineEvent[]
+}
+
+model Thinker {
+  id                String       @id @default(cuid())
+  name              String
+  periodId          String
+  period            Period       @relation(fields: [periodId], references: [id], onDelete: Restrict)
+  birthYear         Int?
+  deathYear         Int?
+  biography         Json
+  mainIdeas         Json
+  educationalViews  Json
+  modernImportance  Json
+  image             String?
+  reviewStatus      ReviewStatus @default(DRAFT)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  values     ThinkerValue[]
+  works      Source[]
+  activities Activity[]
+  tests      Test[]
+}
+
+model EducationalValue {
+  id                   String        @id @default(cuid())
+  name                 Json
+  description          Json
+  modernInterpretation Json
+  category             ValueCategory
+  reviewStatus         ReviewStatus  @default(DRAFT)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  thinkers ThinkerValue[]
+  sources  SourceValue[]
+}
+
+model ThinkerValue {
+  thinkerId   String
+  valueId     String
+  description Json?
+  sourceId    String?
+  thinker     Thinker          @relation(fields: [thinkerId], references: [id], onDelete: Cascade)
+  value       EducationalValue @relation(fields: [valueId], references: [id], onDelete: Cascade)
+  source      Source?          @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+
+  @@id([thinkerId, valueId])
+}
+
+model Source {
+  id                 String       @id @default(cuid())
+  title              Json
+  type               SourceType
+  periodId           String
+  period             Period       @relation(fields: [periodId], references: [id], onDelete: Restrict)
+  thinkerId          String?
+  thinker            Thinker?     @relation(fields: [thinkerId], references: [id], onDelete: SetNull)
+  content            String
+  excerpt            String
+  description        Json
+  educationalMeaning Json
+  dissertationNote   Json?
+  reference          String
+  image              String?
+  reviewStatus       ReviewStatus @default(DRAFT)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  values       SourceValue[]
+  thinkerLinks ThinkerValue[]
+  activities   Activity[]
+}
+
+model SourceValue {
+  sourceId String
+  valueId  String
+  source   Source           @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  value    EducationalValue @relation(fields: [valueId], references: [id], onDelete: Cascade)
+
+  @@id([sourceId, valueId])
+}
+
+model Activity {
+  id            String       @id @default(cuid())
+  type          ActivityType
+  title         Json
+  prompt        Json
+  modernExample Json?
+  criterion     Criterion
+  sourceId      String?
+  source        Source?      @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  periodId      String?
+  period        Period?      @relation(fields: [periodId], references: [id], onDelete: SetNull)
+  thinkerId     String?
+  thinker       Thinker?     @relation(fields: [thinkerId], references: [id], onDelete: SetNull)
+  createdById   String?
+  createdBy     User?        @relation("ActivityCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewStatus  ReviewStatus @default(DRAFT)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  options  ActivityOption[]
+  attempts ActivityAttempt[]
+}
+
+model ActivityOption {
+  id          String   @id @default(cuid())
+  activityId  String
+  activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  text        Json
+  isCorrect   Boolean  @default(false)
+  explanation Json?
+  order       Int      @default(0)
+
+  attempts ActivityAttempt[]
+}
+
+model ActivityAttempt {
+  id         String         @id @default(cuid())
+  userId     String
+  activityId String
+  optionId   String
+  isCorrect  Boolean
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity   Activity       @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  option     ActivityOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, activityId])
+}
+
+model Test {
+  id          String   @id @default(cuid())
+  title       Json
+  description Json
+  periodId    String?
+  period      Period?  @relation(fields: [periodId], references: [id], onDelete: SetNull)
+  thinkerId   String?
+  thinker     Thinker? @relation(fields: [thinkerId], references: [id], onDelete: SetNull)
+  createdById String?
+  createdBy   User?    @relation("TestCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions TestQuestion[]
+  results   TestResult[]
+}
+
+model TestQuestion {
+  id        String    @id @default(cuid())
+  testId    String
+  test      Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  question  Json
+  order     Int       @default(0)
+  criterion Criterion
+
+  options TestOption[]
+  answers StudentAnswer[]
+}
+
+model TestOption {
+  id         String       @id @default(cuid())
+  questionId String
+  question   TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       Json
+  isCorrect  Boolean      @default(false)
+  order      Int          @default(0)
+
+  answers StudentAnswer[]
+}
+
+model TestResult {
+  id          String   @id @default(cuid())
+  userId      String
+  testId      String
+  correct     Int
+  total       Int
+  percent     Int
+  level       Level
+  byCriterion Json
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test        Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  answers StudentAnswer[]
+
+  @@index([userId])
+  @@index([testId])
+}
+
+model StudentAnswer {
+  id           String       @id @default(cuid())
+  testResultId String
+  questionId   String
+  optionId     String
+  isCorrect    Boolean
+  testResult   TestResult   @relation(fields: [testResultId], references: [id], onDelete: Cascade)
+  question     TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option       TestOption   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+}
+
+model Diagnostic {
+  id    String         @id @default(cuid())
+  kind  DiagnosticKind
+  title Json
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  questions DiagnosticQuestion[]
+  results   DiagnosticResult[]
+}
+
+model DiagnosticQuestion {
+  id           String     @id @default(cuid())
+  diagnosticId String
+  diagnostic   Diagnostic @relation(fields: [diagnosticId], references: [id], onDelete: Cascade)
+  question     Json
+  order        Int        @default(0)
+  criterion    Criterion
+
+  options DiagnosticOption[]
+  answers DiagnosticAnswer[]
+}
+
+model DiagnosticOption {
+  id         String             @id @default(cuid())
+  questionId String
+  question   DiagnosticQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       Json
+  isCorrect  Boolean            @default(false)
+  order      Int                @default(0)
+
+  answers DiagnosticAnswer[]
+}
+
+model DiagnosticResult {
+  id           String         @id @default(cuid())
+  userId       String
+  diagnosticId String
+  kind         DiagnosticKind
+  correct      Int
+  total        Int
+  percent      Int
+  level        Level
+  byCriterion  Json
+  createdAt    DateTime       @default(now())
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diagnostic   Diagnostic     @relation(fields: [diagnosticId], references: [id], onDelete: Cascade)
+
+  answers DiagnosticAnswer[]
+
+  @@index([userId, kind])
+}
+
+model DiagnosticAnswer {
+  id                 String             @id @default(cuid())
+  diagnosticResultId String
+  questionId         String
+  optionId           String
+  isCorrect          Boolean
+  result             DiagnosticResult   @relation(fields: [diagnosticResultId], references: [id], onDelete: Cascade)
+  question           DiagnosticQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option             DiagnosticOption   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+}
+
+model LevelThreshold {
+  level      Level @id
+  minPercent Int
+}
+
+model StudentProgress {
+  id         String         @id @default(cuid())
+  userId     String
+  entityType ProgressEntity
+  entityId   String
+  viewedAt   DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, entityType, entityId])
+}
+
+model ComparisonEntry {
+  id           String       @id @default(cuid())
+  aspect       Json
+  goldenHorde  Json
+  nogai        Json
+  similarity   Json
+  difference   Json
+  sourceRef    String?
+  order        Int          @default(0)
+  reviewStatus ReviewStatus @default(DRAFT)
+}
+
+model TimelineEvent {
+  id           String       @id @default(cuid())
+  kind         TimelineKind
+  year         Int?
+  yearLabel    String?
+  title        Json
+  description  Json
+  periodId     String?
+  period       Period?      @relation(fields: [periodId], references: [id], onDelete: SetNull)
+  refType      String?
+  refId        String?
+  sourceRef    String?
+  order        Int          @default(0)
+  reviewStatus ReviewStatus @default(DRAFT)
+}

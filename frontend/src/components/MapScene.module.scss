@@ -1,0 +1,71 @@
+.wrap { width: 100%; display: grid; gap: 14px; justify-items: center; min-width: 0; }
+.map { display: block; width: min(100%, calc(var(--stage-h, 400px) * var(--ratio, 1.27))); height: auto; overflow: visible; }
+
+/* Xarita qatlamlari */
+.sea { fill: #0f2d26; }
+.land { fill: #25513f; stroke: #3b705c; stroke-width: .6; stroke-linejoin: round; }
+.graticule { fill: none; stroke: #ffffff1c; stroke-width: .5; stroke-dasharray: 2 4; }
+.rivers path { fill: none; stroke: #5fa39a; stroke-width: 1.3; stroke-linecap: round; opacity: .7; }
+
+/* Hududlar: faol davr to'liq yorqin, ikkinchisi xira */
+.zone { opacity: .4; transition: opacity .9s ease; &.hot { opacity: 1; } }
+.hordeFill { fill: #e2c788; opacity: .3; }
+.nogaiFill { fill: #e8845c; opacity: .34; }
+.hatch { opacity: .22; }
+.outline { fill: none; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.hordeLine { stroke: #f1dfaa; }
+.nogaiLine { stroke: #ffae85; }
+
+/* Yorliqlar */
+.water text { font: italic 400 10px var(--f-serif); letter-spacing: .06em; fill: #7fb0a8; opacity: .85; }
+.water .small { font-size: 8px; }
+.water .river { font-size: 9px; fill: #9bd0c6; letter-spacing: .12em; }
+.region { font: 500 15px var(--f-serif); letter-spacing: .24em; opacity: .28; paint-order: stroke; stroke: #0c241e; stroke-width: 3px; stroke-linejoin: round; transition: opacity .8s ease; &.on { opacity: .95; } }
+.hordeText { fill: #f1dfaa; }
+.nogaiText { fill: #ffbe9e; }
+.city { opacity: 0; transition: opacity .6s ease; &.on { opacity: 1; } text { font: 500 10.5px var(--f-sans); fill: #f3ecd2; paint-order: stroke; stroke: #0c241e; stroke-width: 3px; stroke-linejoin: round; } }
+.mark { fill: #f1dfaa; }
+.capital .mark { fill: #fff3c4; stroke: #0c241e; stroke-width: 1; }
+.capital text { font-weight: 600; }
+.muted { &.on { opacity: .75; } .mark { fill: #9fb8a6; } text { fill: #b4c9b8; font-size: 9px; font-style: italic; } }
+.pulse { fill: none; stroke: #fff3c4; stroke-width: 1.2; }
+.year { font: 500 54px var(--f-serif); fill: #f1dfaa; opacity: 0; letter-spacing: -.02em; transition: opacity 1s ease; &.on { opacity: .26; } }
+
+/* Migratsiya yo'nalishi */
+.flow { fill: none; stroke: #ffae85; stroke-width: 2; stroke-dasharray: 5 5; stroke-linecap: round; }
+
+/* Davr tanlagich */
+.controls { position: relative; width: 100%; max-width: 480px; display: grid; grid-template-columns: 1fr 1fr; padding-bottom: 14px; }
+.era { display: flex; flex-direction: column; gap: 2px; padding: 4px 0 6px; border: 0; background: none; color: #a8bda6; text-align: left; cursor: pointer; transition: color .4s, background .3s;
+  strong { font: italic 500 18px/1.2 var(--f-serif); } small { font: 500 11px/1.2 var(--f-sans); letter-spacing: .08em; opacity: .85; }
+  &:last-of-type { align-items: flex-end; text-align: right; } &:hover { color: #e9efe3; } &.active { color: #f1dfaa; } &:focus-visible { outline: 2px solid #e2c788; outline-offset: 4px; } }
+.track { position: absolute; left: 0; right: 0; bottom: 3px; height: 1px; background: #e2c78859; }
+.marker { position: absolute; top: -3px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: #f1dfaa; transition: left .9s cubic-bezier(.65, 0, .35, 1), background .6s; &.right { left: calc(100% - 7px); background: #ffae85; } }
+.caption { width: 100%; max-width: 480px; min-height: 3.6em; margin: 0; font: 400 13px/1.5 var(--f-sans); color: #cdd9c8; span { display: block; margin-top: 4px; font-size: 11px; font-style: italic; color: #8fa68e; } }
+
+@media (max-height: 700px) { .caption { display: none; } }
+
+/* Telefon va planshet: xarita matn ostida, davrlar tugma-pill ko'rinishida */
+@media (max-width: 900px) {
+  .wrap { gap: 10px; }
+  .map { width: min(100%, calc(var(--stage-h, 300px) * var(--ratio, 1.27))); }
+  .controls { display: flex; justify-content: center; gap: 10px; padding: 0; }
+  .era { flex-direction: row; align-items: center; gap: 8px; min-height: 40px; padding: 6px 16px; border: 1px solid #e2c78866; border-radius: 999px;
+    strong { font-size: 15px; } small { display: none; }
+    &:last-of-type { align-items: center; text-align: left; } &.active { background: #e2c788; border-color: #e2c788; color: #173d32; } }
+  .track, .caption { display: none; }
+  .year { font-size: 46px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .outline { animation: drawIn 2.6s cubic-bezier(.5, 0, .2, 1) both; }
+  .revealCircle { animation: revealGrow 2.8s cubic-bezier(.22, 1, .36, 1) both; }
+  .pulse { animation: pulse 2.4s ease-out infinite; }
+  .flowGroup { animation: fadeIn .9s ease .5s both; }
+  .flow { animation: march 1.1s linear infinite; }
+}
+@keyframes drawIn { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes revealGrow { from { r: 0; } }
+@keyframes pulse { from { r: 3; opacity: .9; } to { r: 16; opacity: 0; } }
+@keyframes march { to { stroke-dashoffset: -10; } }
+@keyframes fadeIn { from { opacity: 0; } }

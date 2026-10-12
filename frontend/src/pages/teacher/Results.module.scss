@@ -1,0 +1,8 @@
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; padding: 14px 16px; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); }
+.search { width: 280px; max-width: 100%; }
+.auto { margin-left: auto; font-size: 12px; color: var(--c-muted); }
+.totals { margin: 0 0 12px; font-size: 13px; color: var(--c-muted); }
+.when { white-space: nowrap; color: var(--c-muted); font-size: 13px; }
+.work { display: block; line-height: 1.4; }
+.more { display: flex; justify-content: center; margin-top: 16px; }
+@media (max-width: 700px) { .auto { margin-left: 0; width: 100%; } .search { width: 100%; } }
